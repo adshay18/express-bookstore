@@ -55,7 +55,6 @@ router.put('/:isbn', async function(req, res, next) {
 
 router.delete('/:isbn', async function(req, res, next) {
 	try {
-		validate(req.body.book, bookSchema);
 		await Book.remove(req.params.isbn);
 		return res.json({ message: 'Book deleted' });
 	} catch (err) {
