@@ -32,6 +32,7 @@ describe('Book route test', function() {
 			year: 2022
 		});
 	});
+
 	/** GET / => {books: [book, ...]}  */
 	describe('GET /books', function() {
 		test('can get list of all books', async function() {
@@ -40,6 +41,7 @@ describe('Book route test', function() {
 			expect(response.statusCode).toEqual(200);
 		});
 	});
+
 	/** GET /[isbn]  => {book: book} */
 	describe('GET /books/:isbn', function() {
 		test('can get one book', async function() {
@@ -61,6 +63,40 @@ describe('Book route test', function() {
 		test('returns 404 status code for invalid isbn', async function() {
 			let response = await request(app).get('/books/0000330002');
 			expect(response.statusCode).toEqual(404);
+		});
+	});
+
+	/** POST /   bookData => {book: newBook}  */
+	describe('POST /books', function() {
+		test('creates and validates book request', async function() {
+			let newBook = {
+				book: {
+					isbn: '0000002341',
+					amazon_url: 'http://test.website.com',
+					author: 'Book Creator',
+					language: 'english',
+					pages: 1,
+					publisher: 'Test Book Publisher',
+					title: 'How to Make a Book Using Node',
+					year: 2022
+				}
+			};
+			let response = await request(app).post('/books').send(newBook);
+			expect(response.body).toEqual(newBook);
+			expect(response.statusCode).toEqual(201);
+		});
+		test('returns status code 400 for bad book request', async function() {
+			let badBook = {
+				book: {
+					isbn: '0000053241',
+					publisher: 'Test Book Publisher',
+					title: 'How to Make a Book Using Node',
+					year: 2022
+				}
+			};
+			let response = await request(app).post('/books').send(badBook);
+			console.log(response.body);
+			expect(response.statusCode).toEqual(400);
 		});
 	});
 });
