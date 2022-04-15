@@ -99,6 +99,41 @@ describe('Book route test', function() {
 			expect(response.statusCode).toEqual(400);
 		});
 	});
+
+	/** PUT /[isbn]   bookData => {book: updatedBook}  */
+	describe('PUT /books', function() {
+		test('validates and updates existing', async function() {
+			let updatedBook = {
+				book: {
+					isbn: '0000000001',
+					amazon_url: 'http://test.website.com',
+					author: 'Book Creator',
+					language: 'english',
+					pages: 1,
+					publisher: 'Test Book Publisher',
+					title: 'How to Make a Book Using Node',
+					year: 2022
+				}
+			};
+			let response = await request(app).put('/books/0000000001').send(updatedBook);
+			console.log(request.body);
+			expect(response.body).toEqual(updatedBook);
+			expect(response.statusCode).toEqual(200);
+		});
+		test('returns status code 400 for bad book request', async function() {
+			let badBook = {
+				book: {
+					isbn: '0000000001',
+					publisher: 'Test Book Publisher',
+					title: 'How to Make a Book Using Node',
+					year: 2022
+				}
+			};
+			let response = await request(app).put('/books/0000000001').send(badBook);
+			console.log(response.body);
+			expect(response.statusCode).toEqual(400);
+		});
+	});
 });
 
 // Sever db connection

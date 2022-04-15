@@ -44,7 +44,7 @@ router.post('/', async function(req, res, next) {
 router.put('/:isbn', async function(req, res, next) {
 	try {
 		validate(req.body.book, bookSchema);
-		const updatedBook = await Book.update(req.params.isbn, req.body);
+		const updatedBook = await Book.update(req.params.isbn, req.body.book);
 		return res.json({ book: updatedBook });
 	} catch (err) {
 		return next(err);
