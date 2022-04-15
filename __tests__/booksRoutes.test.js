@@ -21,26 +21,46 @@ describe('Book route test', function() {
 			title: 'Testing Books: How to Test',
 			year: 2022
 		});
+		let testBook2 = Book.create({
+			isbn: '0000000002',
+			amazon_url: 'http://test.website.com',
+			author: 'Test Author2',
+			language: 'english',
+			pages: 123,
+			publisher: 'Test Book Publisher',
+			title: 'Testing Books: The SQL',
+			year: 2022
+		});
 	});
 	/** GET / => {books: [book, ...]}  */
 	describe('GET /books', function() {
-		test('can get books', async function() {
+		test('can get list of all books', async function() {
 			let response = await request(app).get('/books');
+			expect(response.body.books.length).toEqual(2);
+			expect(response.statusCode).toEqual(200);
+		});
+	});
+	/** GET /[isbn]  => {book: book} */
+	describe('GET /books/:isbn', function() {
+		test('can get one book', async function() {
+			let response = await request(app).get('/books/0000000001');
 			expect(response.body).toEqual({
-				books: [
-					{
-						isbn: '0000000001',
-						amazon_url: 'http://test.website.com',
-						author: 'Test Author',
-						language: 'english',
-						pages: 999,
-						publisher: 'Test Book Publisher',
-						title: 'Testing Books: How to Test',
-						year: 2022
-					}
-				]
+				book: {
+					isbn: '0000000001',
+					amazon_url: 'http://test.website.com',
+					author: 'Test Author',
+					language: 'english',
+					pages: 999,
+					publisher: 'Test Book Publisher',
+					title: 'Testing Books: How to Test',
+					year: 2022
+				}
 			});
 			expect(response.statusCode).toEqual(200);
+		});
+		test('returns 404 status code for invalid isbn', async function() {
+			let response = await request(app).get('/books/0000330002');
+			expect(response.statusCode).toEqual(404);
 		});
 	});
 });
