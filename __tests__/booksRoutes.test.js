@@ -130,8 +130,20 @@ describe('Book route test', function() {
 				}
 			};
 			let response = await request(app).put('/books/0000000001').send(badBook);
-			console.log(response.body);
 			expect(response.statusCode).toEqual(400);
+		});
+	});
+
+	/** DELETE /[isbn]   => {message: "Book deleted"} */
+	describe('DELETE /books/:isbn', function() {
+		test('Deletes book from db', async function() {
+			let response = await request(app).delete('/books/0000000002');
+			expect(response.statusCode).toEqual(200);
+			expect(response.body).toEqual({ message: 'Book deleted' });
+		});
+		test('Returns status code 404 for invalid isbn', async function() {
+			let response = await request(app).delete('/books/123');
+			expect(response.statusCode).toEqual(404);
 		});
 	});
 });
