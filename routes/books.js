@@ -1,6 +1,6 @@
 const express = require('express');
 const router = new express.Router();
-const bookSchema = require('../schemas/bookSchema.json');
+const bookSchema = require('../schema/bookSchema.json');
 const Book = require('../models/book');
 const { validate } = require('../config');
 

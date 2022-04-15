@@ -1,6 +1,6 @@
 /** Common config for bookstore. */
 const jsonschema = require('jsonschema');
-const ExpressError = require('../expressError');
+const ExpressError = require('./expressError');
 
 let DB_URI = `postgresql://`;
 
